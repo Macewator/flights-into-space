@@ -1,18 +1,19 @@
 package eu.treative.flightsintospace.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
 public class Flight {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_flight")
     private Long id;
     private LocalDateTime flightStart;
@@ -22,6 +23,7 @@ public class Flight {
     private String ticketPrice;
     private String flightCode;
     @ManyToMany(mappedBy = "flights")
+    @JsonIgnoreProperties("flights")
     @OrderBy("birthDate")
-    Set<Tourist> tourists = new HashSet<>();
+    List<Tourist> tourists = new ArrayList<>();
 }

@@ -1,0 +1,49 @@
+<div class="container">
+    <div class="row">
+        <div class="mx-auto">
+            <h2>Tourist information</h2>
+        </div>
+    </div>
+    <div class="row" ng-if="ctrl.msg">
+        <div class="mx-auto">
+            <p class="text-danger">{{ctrl.msg}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First name</th>
+                    <th scope="col">Last name</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">Notes</th>
+                    <th scope="col">Birthdate</th>
+                    <th scope="col">PESEL</th>
+                    <th scope="col" class="text-center">Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ctrl.tourist.id}}</td>
+                    <td>{{ctrl.tourist.firstName}}</td>
+                    <td>{{ctrl.tourist.lastName}}</td>
+                    <td>{{ctrl.tourist.gender}}</td>
+                    <td>{{ctrl.tourist.country}}</td>
+                    <td>{{ctrl.tourist.notes}}</td>
+                    <td>{{ctrl.tourist.birthDate | date:'yyyy-MM-dd'}}</td>
+                    <td>{{ctrl.tourist.pesel}}</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-danger" title="Delete" ng-click="ctrl.deleteTourist()">
+                            <i class="fas fa-user-minus"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

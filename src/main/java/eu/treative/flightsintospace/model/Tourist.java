@@ -1,9 +1,11 @@
 package eu.treative.flightsintospace.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,7 +13,7 @@ import java.util.List;
 public class Tourist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tourist")
     private Long id;
     private String firstName;
@@ -23,9 +25,10 @@ public class Tourist {
     private LocalDate birthDate;
     private String pesel;
     @ManyToMany
+    @JsonIgnoreProperties("tourists")
     @OrderBy("flightStart")
     @JoinTable(name = "tourist_flights",
             joinColumns = @JoinColumn(name = "tourist_id"),
             inverseJoinColumns = @JoinColumn(name = "flight_id"))
-    private List<Flight> flights;
+    private List<Flight> flights = new ArrayList<>();
 }

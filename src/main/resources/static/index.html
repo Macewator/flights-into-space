@@ -1,10 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html data-ng-app="app" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Flights into space</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <!-- Bootstrap -->
+    <script src="node_modules/jquery/dist/jquery.slim.js"></script>
+    <script src="node_modules/popper.js/dist/umd/popper.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
+
+    <!-- Angular-->
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angular-route/angular-route.js"></script>
+    <script src="node_modules/angular-resource/angular-resource.js"></script>
+
+    <!-- Application-->
+    <script src="app/index.js"></script>
+    <script src="app/config.js"></script>
+
+    <script src="app/service/touristService.js"></script>
+    <script src="app/service/flightService.js"></script>
+
+    <script src="app/components/tourist/add/touristAddController.js"></script>
+    <script src="app/components/tourist/delete/touristDeleteController.js"></script>
+    <script src="app/components/tourist/edit/touristEditController.js"></script>
+    <script src="app/components/tourist/flights/touristFlightsController.js"></script>
+    <script src="app/components/tourist/list/touristListController.js"></script>
+    <script src="app/components/flight/delete/flightDeleteController.js"></script>
+
 </head>
 <body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Flights into space</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-asset">
+                <a class="nav-link" href="#!tourists">Tourists</a>
+            </li>
+            <li class="nav-asset">
+                <a class="nav-link" href="#!flights">Flights</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<main role="main" class="container">
+    <div class="jumbotron jumbo-custom text-white text-center my-2">
+        <h1 class="text-black">Flights into space</h1>
+        <p class="lead text-black">Space flight management system</p>
+    </div>
+</main>
+
+<div ng-view></div>
 
 </body>
 </html>

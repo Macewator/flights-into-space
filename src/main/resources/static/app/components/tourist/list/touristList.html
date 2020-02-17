@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="form">
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Nazwisko" ng-model="lastName">
+                    <button class="btn btn-primary mx-1" ng-click="ctrl.search(lastName)">Szukaj</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First name</th>
+                    <th scope="col">Last name</th>
+                    <th scope="col">PESEL</th>
+                    <th scope="col" class="text-center">Options</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="tourist in ctrl.tourists">
+                    <th scope="row">{{tourist.id}}</th>
+                    <td>{{tourist.lastName}}</td>
+                    <td>{{tourist.lastName}}</td>
+                    <td>{{tourist.pesel}}</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-primary" title="Edit">
+                            <a ng-href="#!tourist-edit/{{tourist.id}}" class="text-white">
+                                <i class="fas fa-user-edit"></i>
+                            </a>
+                        </button>
+                        <button class="btn btn-sm btn-warning" title="Flight managment">
+                            <a ng-href="#!tourist-flights/{{tourist.id}}" class="text-white">
+                                <i class="fas fa-wrench"></i>
+                            </a>
+                        </button>
+                        <button class="btn btn-sm btn-danger" title="Delete">
+                            <a ng-href="#!tourist-delete/{{tourist.id}}" class="text-white">
+                                <i class="fas fa-user-minus"></i>
+                            </a>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <a class="btn btn-primary mb-3" ng-href="#!tourist-add">Add new tourist</a>
+    </div>
+</div>
