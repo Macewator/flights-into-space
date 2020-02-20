@@ -1,14 +1,13 @@
-/*
 angular.module('app')
-    .controller('FlightAddController', function ($routeParams, $location, $timeout, FlightService, Flight) {
+    .controller('FlightAddController', function ($location, FlightService, Flight) {
         const vm = this;
         vm.flight = new Flight();
 
         const saveCallback = () => {
-            $location.path(`/flight-edit/${vm.flight.id}`);
+            $location.path(`/flight-add-tourists/${vm.user.id}`);
         };
         const errorCallback = err => {
-            vm.msg = `Błąd zapisu: ${err.data.message}`;
+            vm.msg = `Save error: ${err.data.message}`;
         };
 
         vm.saveFlight = () => {
@@ -16,4 +15,4 @@ angular.module('app')
                 .then(saveCallback)
                 .catch(errorCallback);
         };
-    });*/
+    });

@@ -22,8 +22,8 @@ public class FlightController {
     private FlightService flightService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Flight>> getAllFlights() {
-        List<Flight> flights = flightService.gtaAllFlights();
+    public ResponseEntity<List<Flight>> getAllFlights(@RequestParam(required = false) String keyword, @RequestParam(required = false) String category) {
+        List<Flight> flights = flightService.gtaAllFlights(keyword, category);
         return ResponseEntity.ok(flights);
     }
 
@@ -45,7 +45,7 @@ public class FlightController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> saveNewFlight(@RequestBody Flight flight) {
+    public ResponseEntity<Flight> saveNewFlight(@RequestBody Flight flight) {
         if (flight.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "added flight cannot have id set");
         }
@@ -58,22 +58,16 @@ public class FlightController {
         return ResponseEntity.created(location).body(savedFlight);
     }
 
-    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Flight> updateFlights(@PathVariable Long id, @RequestBody Flight flight){
-        if(!id.equals(flight.getId())){
+    @PutMapping(path = "/{idF}/tourists/{idT}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Flight> manageFlightsTourists(@RequestParam String action,@PathVariable Long idF, @PathVariable Long idT, @RequestBody Flight flight){
+        if(!idF.equals(flight.getId())){
             throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid id of the tourist sent");
         }
-        Flight updatedFlight = flightService.updateFlight(flight);
+        Flight updatedFlight = flightService.manageFlightsTourists(flight, idT, action);
         return ResponseEntity.ok(updatedFlight);
     }
 
-    /*@DeleteMapping("/{flightId}/flights/{touristId}")
-    public ResponseEntity<List<Tourist>> removeFlightTourist(@PathVariable Long flightId, @PathVariable Long touristId){
-        List<Tourist> flights = flightService.removeFlightTourist(flightId, touristId);
-        return ResponseEntity.ok(flights);
-    }*/
-
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> removeFlight(@PathVariable Long id){
         flightService.removeFlight(id);
         return ResponseEntity.ok().build();

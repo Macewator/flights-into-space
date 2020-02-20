@@ -1,21 +1,17 @@
 <div class="container">
     <div class="row">
         <div class="mx-auto">
-            <h2>Tourist flights</h2>
+            <h2>Booked Flights</h2>
+        </div>
+    </div>
+    <div class="row" ng-if="ctrl.msg">
+        <div class="mx-auto">
+            <p class="text-danger">{{ctrl.msg}}</p>
         </div>
     </div>
     <div class="row">
         <div class="col-12">
-            <div class="text-center">
-                <p>Imię: {{ctrl.tourist.firstName}}</p>
-                <p>Nazwisko: {{ctrl.tourist.lastName}}</p>
-                <p>Pesel: {{ctrl.tourist.pesel}}</p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-hover" ng-if="ctrl.flights.length">
+            <table class="table table-hover" ng-if="ctrl.touristFlights.length">
                 <thead>
                 <tr>
                     <th scope="col">Flight start</th>
@@ -28,14 +24,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="flight in ctrl.flights">
+                <tr ng-repeat="flight in ctrl.touristFlights">
                     <td>{{flight.flightStart | date:'yyyy-MM-dd HH:mm'}}</td>
                     <td>{{flight.flightEnd | date:'yyyy-MM-dd HH:mm'}}</td>
                     <td>{{flight.numberOfSeats}}</td>
                     <td>{{flight.numberOfTourist}}</td>
                     <td>{{flight.ticketPrice}}</td>
                     <td>{{flight.flightCode}}</td>
-                    <td class="text-center">
                     <td class="text-center">
                         <button class="btn btn-sm btn-danger" title="Delete" ng-click="ctrl.removeFlight(flight)">
                             <i class="fas fa-user-minus"></i>
@@ -44,8 +39,8 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="text-center" ng-if="!ctrl.flights.length">
-                <h1>No flights booked</h1>
+            <div class="text-center" ng-if="!ctrl.touristFlights.length">
+                <h1>No booked flights</h1>
             </div>
         </div>
     </div>

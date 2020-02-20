@@ -1,3 +1,79 @@
 <div class="container">
-
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="form">
+                <div class="input-group mb-2 mr-sm-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <input type="text" class="form-control" id="searchInput" placeholder="search" ng-model="keyword">
+                    <select class="form-control" ng-model="category">
+                        <option disabled selected value> -- select an category -- </option>
+                        <option value="start">start date</option>
+                        <option value="end">end date</option>
+                        <option value="price">ticket price</option>
+                        <option value="seats">number of seats</option>
+                        <option value="tourists">number of tourists</option>
+                    </select>
+                    <button class="btn btn-primary mx-1" ng-click="ctrl.search(keyword, category)">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-if="ctrl.flights.length">
+        <div class="mx-auto">
+            <p class="text-info">Number of result: {{ctrl.flights.length}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Flight start</th>
+                    <th scope="col">Flight end</th>
+                    <th scope="col">Number of seats</th>
+                    <th scope="col">Number of tourist</th>
+                    <th scope="col">Ticket price</th>
+                    <th scope="col">Flight code</th>
+                    <th scope="col" class="text-center">Options</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="flight in ctrl.flights">
+                    <th scope="row">{{flight.id}}</th>
+                    <td>{{flight.flightStart | date:'yyyy-MM-dd HH:mm'}}</td>
+                    <td>{{flight.flightEnd | date:'yyyy-MM-dd HH:mm'}}</td>
+                    <td>{{flight.numberOfSeats}}</td>
+                    <td>{{flight.numberOfTourist}}</td>
+                    <td>{{flight.ticketPrice}}</td>
+                    <td>{{flight.flightCode}}</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-primary" title="Add tourists">
+                            <a ng-href="#!flight-add-tourists/{{flight.id}}" class="text-white">
+                                <i class="fas fa-user-edit"></i>
+                            </a>
+                        </button>
+                        <button class="btn btn-sm btn-warning" title="Tourists managment">
+                            <a ng-href="#!flight-tourists/{{flight.id}}" class="text-white">
+                                <i class="fas fa-wrench"></i>
+                            </a>
+                        </button>
+                        <button class="btn btn-sm btn-danger" title="Delete">
+                            <a ng-href="#!flight-delete/{{flight.id}}" class="text-white">
+                                <i class="fas fa-user-minus"></i>
+                            </a>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <a class="btn btn-primary mb-3" ng-href="#!flight-add">Add new flight</a>
+    </div>
 </div>

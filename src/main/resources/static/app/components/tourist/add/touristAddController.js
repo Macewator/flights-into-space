@@ -1,13 +1,13 @@
 angular.module('app')
-    .controller('TouristAddController', function ($routeParams, $location, $timeout, TouristService, Tourist) {
+    .controller('TouristAddController', function ($location, TouristService, Tourist) {
         const vm = this;
         vm.tourist = new Tourist();
 
         const saveCallback = () => {
-            $location.path(`/tourist-edit/${vm.tourist.id}`);
+            $location.path(`/tourist-add-flights/${vm.tourist.id}`);
         };
         const errorCallback = err => {
-            vm.msg = `Write error: ${err.data.message}`;
+            vm.msg = `Save error: ${err.data.message}`;
         };
 
         vm.saveTourist = () => {

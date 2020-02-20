@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="mx-auto">
-            <h2>Reservations</h2>
+            <h2>Tourists</h2>
         </div>
     </div>
     <div class="row" ng-if="ctrl.msg">
@@ -11,7 +11,7 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <table class="table table-hover" ng-if="ctrl.flightTourists.length">
+            <table class="table table-hover" ng-if="ctrl.availableTourists.length">
                 <thead>
                 <tr>
                     <th scope="col">First name</th>
@@ -21,11 +21,11 @@
                     <th scope="col">Notes</th>
                     <th scope="col">Date of birth</th>
                     <th scope="col">PESEL</th>
-                    <th scope="col" class="text-center">Delete</th>
+                    <th scope="col" class="text-center">Add</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="tourist in ctrl.flightTourists">
+                <tr ng-repeat="tourist in ctrl.availableTourists">
                     <td>{{tourist.firstName}}</td>
                     <td>{{tourist.lastName}}</td>
                     <td>{{tourist.gender}}</td>
@@ -34,15 +34,15 @@
                     <td>{{tourist.birthDate | date:'yyyy-MM-dd'}}</td>
                     <td>{{tourist.pesel}}</td>
                     <td class="text-center">
-                        <button class="btn btn-sm btn-danger" title="Delete" ng-click="ctrl.removeTourist(tourist)">
-                            <i class="fas fa-user-minus"></i>
+                        <button class="btn btn-sm btn-danger" title="Add" ng-click="ctrl.addTourist(tourist)">
+                            <i class="fas fa-user-plus"></i>
                         </button>
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <div class="text-center" ng-if="!ctrl.flightTourists.length">
-                <h1>No registered tourists</h1>
+            <div class="text-center" ng-if="!ctrl.availableTourists.length">
+                <h1>No available tourist</h1>
             </div>
         </div>
     </div>

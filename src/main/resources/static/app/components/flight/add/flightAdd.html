@@ -1,3 +1,43 @@
 <div class="container">
-
+    <div class="row">
+        <div class="mx-auto">
+            <h2>New flight</h2>
+        </div>
+    </div>
+    <div class="row" ng-if="ctrl.msg">
+        <div class="mx-auto">
+            <p class="text-danger">{{ctrl.msg}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <form class="mx-auto col-10 col-md-6">
+            <div class="form-group">
+                <label for="FlightStartInput">Flight start</label>
+                <input type="datetime-local" class="form-control" id="FlightStartInput" placeholder="flight start" ng-model="ctrl.flight.flightStart">
+            </div>
+            <div class="form-group">
+                <label for="FlightEndInput">Flight end</label>
+                <input type="datetime-local" class="form-control" id="FlightEndInput" placeholder="flight end" ng-model="ctrl.flight.flightEnd">
+            </div>
+            <div class="form-group">
+                <label for="NumberOfSeatsInput">Number of seats:</label>
+                <input type="number" class="form-control" id="NumberOfSeatsInput" placeholder="number of seats" ng-model="ctrl.flight.numberOfSeats">
+            </div>
+            <div class="form-group">
+                <label for="NumberOfTouristInput">Number of tourist:</label>
+                <input type="number" class="form-control" id="NumberOfTouristInput" placeholder="number of tourist" ng-model="ctrl.flight.numberOfTourist">
+            </div>
+            <div class="form-group">
+                <label for="TicketPriceInput">Ticket price:</label>
+                <input type="number" class="form-control" id="TicketPriceInput" placeholder="ticket price" ng-model="ctrl.flight.ticketPrice">
+            </div>
+            <div class="form-group">
+                <label for="FlightCodeInput">Flight code:</label>
+                <input type="text" class="form-control" id="FlightCodeInput" placeholder="flight code" ng-model="ctrl.flight.flightCode">
+            </div>
+            <div class="form-group mb-3">
+                <button type="submit" class="btn btn-primary" ng-click="ctrl.saveFlight()">Add</button>
+            </div>
+        </form>
+    </div>
 </div>

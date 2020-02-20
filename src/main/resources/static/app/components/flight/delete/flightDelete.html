@@ -14,11 +14,10 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th scope="col">#</th>
                     <th scope="col">Flight start</th>
                     <th scope="col">Flight end</th>
-                    <th scope="col">Number od seats</th>
-                    <th scope="col">Number of tourists</th>
+                    <th scope="col">Number of seats</th>
+                    <th scope="col">Number of tourist</th>
                     <th scope="col">Ticket price</th>
                     <th scope="col">Flight code</th>
                     <th scope="col" class="text-center">Delete</th>
@@ -26,21 +25,18 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td>{{flight.flightStart | date:'yyyy-MM-dd HH:mm'}}</td>
-                    <td>{{flight.flightEnd | date:'yyyy-MM-dd HH:mm'}}</td>
-                    <td>{{flight.numberOfSeats}}</td>
-                    <td>{{flight.numberOfTourist}}</td>
-                    <td>{{flight.ticketPrice}}</td>
-                    <td>{{flight.ticketPrice}}</td>
-                    <td>{{flight.flightCode}}</td>
-                    <td class="text-center">
-                        <button class="btn btn-sm btn-danger" title="Delete" ng-click="ctrl.deleteFlight()">
-                            <i class="fas fa-user-minus"></i>
-                        </button>
-                    </td>
+                    <td>{{ctrl.flight.flightStart | date:'yyyy-MM-dd HH:mm'}}</td>
+                    <td>{{ctrl.flight.flightEnd | date:'yyyy-MM-dd HH:mm'}}</td>
+                    <td>{{ctrl.flight.numberOfSeats}}</td>
+                    <td>{{ctrl.flight.numberOfTourist}}</td>
+                    <td>{{ctrl.flight.ticketPrice}}</td>
+                    <td>{{ctrl.flight.flightCode}}</td>
                 </tr>
                 </tbody>
             </table>
+            <div class="row">
+                <a class="btn btn-primary mb-3" ng-click="ctrl.deleteFlight()">Confirm deletion</a>
+            </div>
         </div>
     </div>
 </div>

@@ -2,21 +2,22 @@ package eu.treative.flightsintospace.service;
 
 import eu.treative.flightsintospace.model.Flight;
 import eu.treative.flightsintospace.model.Tourist;
+import eu.treative.flightsintospace.repository.FlightRepository;
 import eu.treative.flightsintospace.repository.TouristRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class TouristService {
 
     private TouristRepository touristRepository;
+    private FlightRepository flightRepository;
 
     public List<Tourist> gtaAllTourists(String lastName) {
         List<Tourist> tourists;
@@ -25,8 +26,22 @@ public class TouristService {
         } else {
             tourists = touristRepository.findAll();
         }
-        if (tourists == null || tourists.isEmpty()) {
+        if (tourists.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "no tourists found");
+        }
+        return tourists;
+    }
+
+    public List<Tourist> getAllAvailableTouristsForFlight(Long id) {
+        List<Tourist> tourists = new ArrayList<>();
+        for (Tourist tourist : touristRepository.findAll()) {
+            boolean availableTourist = tourist.getFlights().stream().anyMatch(flight -> flight.getId().equals(id));
+            if (!availableTourist) {
+                tourists.add(tourist);
+            }
+        }
+        if (tourists.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "no available tourist found");
         }
         return tourists;
     }
@@ -52,7 +67,7 @@ public class TouristService {
         return touristRepository.save(tourist);
     }
 
-    public Tourist updateTourist(Tourist tourist) {
+    public Tourist manageTouristsFlight(Tourist tourist, Long idf, String action) {
         touristRepository.findByPesel(tourist.getPesel())
                 .ifPresent(asset ->
                 {
@@ -60,19 +75,29 @@ public class TouristService {
                         throw new ResponseStatusException(HttpStatus.CONFLICT, "the pesel number already exists");
                     }
                 });
-        return touristRepository.save(tourist);
+        Flight flight = flightRepository.findById(idf)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The given flight does not exist"));
+        return updateTourist(tourist, action, flight);
+    }
+
+    private Tourist updateTourist(Tourist tourist, String action, Flight flight) {
+        Tourist updatedTourist = getTouristById(tourist.getId());
+        if ("remove".equals(action)) {
+            updatedTourist.removeFlight(flight);
+            return touristRepository.save(updatedTourist);
+        }else {
+            updatedTourist.addFlight(flight);
+            return touristRepository.save(updatedTourist);
+        }
     }
 
     public void removeTourist(Long id) {
-       Tourist tourist = getTouristById(id);
-       tourist.getFlights().clear();
-       touristRepository.delete(tourist);
-    }
-
-    public List<Flight> removeTouristFlight(Long touristId, Long flightId) {
-        Tourist deletedTourist = getTouristById(touristId);
-        return deletedTourist.getFlights().stream()
-                .dropWhile(flight -> flight.getId().equals(flightId))
-                .collect(Collectors.toList());
+        Tourist tourist = getTouristById(id);
+        List<Flight> flights = tourist.getFlights();
+        for (int i = 0; i < flights.size(); i++) {
+            Flight flight = flights.get(i);
+            tourist.removeFlight(flight);
+        }
+        touristRepository.delete(tourist);
     }
 }

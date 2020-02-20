@@ -31,4 +31,29 @@ public class Tourist {
             joinColumns = @JoinColumn(name = "tourist_id"),
             inverseJoinColumns = @JoinColumn(name = "flight_id"))
     private List<Flight> flights = new ArrayList<>();
+
+    public Tourist() {
+    }
+
+    public Tourist(String firstName, String lastName, Gender gender, String country, String notes, LocalDate birthDate, String pesel) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.country = country;
+        this.notes = notes;
+        this.birthDate = birthDate;
+        this.pesel = pesel;
+    }
+
+    public void addFlight(Flight flight) {
+        flight.setNumberOfTourist(flight.getNumberOfTourist() + 1);
+        this.flights.add(flight);
+        flight.getTourists().add(this);
+    }
+
+    public void removeFlight(Flight flight) {
+        flight.setNumberOfTourist(flight.getNumberOfTourist() - 1);
+        this.flights.remove(flight);
+        flight.getTourists().remove(this);
+    }
 }

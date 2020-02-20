@@ -9,9 +9,14 @@
                         </div>
                     </div>
                     <input type="text" class="form-control" id="searchInput" placeholder="Nazwisko" ng-model="lastName">
-                    <button class="btn btn-primary mx-1" ng-click="ctrl.search(lastName)">Szukaj</button>
+                    <button class="btn btn-primary mx-1" ng-click="ctrl.search(lastName)">Search</button>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row" ng-if="ctrl.tourists.length">
+        <div class="mx-auto">
+            <p class="text-info">Number of result: {{ctrl.tourists.length}}</p>
         </div>
     </div>
     <div class="row">
@@ -29,16 +34,16 @@
                 <tbody>
                 <tr ng-repeat="tourist in ctrl.tourists">
                     <th scope="row">{{tourist.id}}</th>
-                    <td>{{tourist.lastName}}</td>
+                    <td>{{tourist.firstName}}</td>
                     <td>{{tourist.lastName}}</td>
                     <td>{{tourist.pesel}}</td>
                     <td class="text-center">
-                        <button class="btn btn-sm btn-primary" title="Edit">
-                            <a ng-href="#!tourist-edit/{{tourist.id}}" class="text-white">
+                        <button class="btn btn-sm btn-primary" title="Add flight">
+                            <a ng-href="#!tourist-add-flights/{{tourist.id}}" class="text-white">
                                 <i class="fas fa-user-edit"></i>
                             </a>
                         </button>
-                        <button class="btn btn-sm btn-warning" title="Flight managment">
+                        <button class="btn btn-sm btn-warning" title="Flights managment">
                             <a ng-href="#!tourist-flights/{{tourist.id}}" class="text-white">
                                 <i class="fas fa-wrench"></i>
                             </a>

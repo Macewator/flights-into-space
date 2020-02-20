@@ -4,11 +4,6 @@
             <h2>Tourist information</h2>
         </div>
     </div>
-    <div class="row" ng-if="ctrl.msg">
-        <div class="mx-auto">
-            <p class="text-danger">{{ctrl.msg}}</p>
-        </div>
-    </div>
     <div class="row">
         <div class="col-12">
             <table class="table table-hover">
@@ -22,7 +17,6 @@
                     <th scope="col">Notes</th>
                     <th scope="col">Birthdate</th>
                     <th scope="col">PESEL</th>
-                    <th scope="col" class="text-center">Delete</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -35,14 +29,12 @@
                     <td>{{ctrl.tourist.notes}}</td>
                     <td>{{ctrl.tourist.birthDate | date:'yyyy-MM-dd'}}</td>
                     <td>{{ctrl.tourist.pesel}}</td>
-                    <td class="text-center">
-                        <button class="btn btn-sm btn-danger" title="Delete" ng-click="ctrl.deleteTourist()">
-                            <i class="fas fa-user-minus"></i>
-                        </button>
-                    </td>
                 </tr>
                 </tbody>
             </table>
+            <div class="row">
+                <a class="btn btn-primary mb-3" ng-click="ctrl.deleteTourist()">Confirm deletion</a>
+            </div>
         </div>
     </div>
 </div>

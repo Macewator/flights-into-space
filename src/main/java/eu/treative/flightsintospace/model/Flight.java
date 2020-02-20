@@ -26,4 +26,17 @@ public class Flight {
     @JsonIgnoreProperties("flights")
     @OrderBy("birthDate")
     List<Tourist> tourists = new ArrayList<>();
+
+    public Flight() {
+    }
+
+    public Flight(LocalDateTime flightStart, LocalDateTime flightEnd, Integer numberOfSeats, Integer numberOfTourist, String ticketPrice, String flightCode, List<Tourist> tourists) {
+        this.flightStart = flightStart;
+        this.flightEnd = flightEnd;
+        this.numberOfSeats = numberOfSeats;
+        this.numberOfTourist = numberOfTourist;
+        this.ticketPrice = ticketPrice;
+        this.flightCode = flightCode;
+        this.tourists = tourists;
+    }
 }

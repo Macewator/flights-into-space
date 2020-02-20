@@ -1,3 +1,4 @@
 .jumbo-custom {
-    background: url('../img/space.jpg') center;
+    background-size: cover;
+    background: url('../img/space.jpg') no-repeat 50% 50%;
 }
