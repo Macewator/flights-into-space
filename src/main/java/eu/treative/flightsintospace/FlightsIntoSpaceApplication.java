@@ -8,6 +8,7 @@ import eu.treative.flightsintospace.repository.TouristRepository;
 import eu.treative.flightsintospace.service.FlightService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.nio.charset.Charset;
 import java.time.LocalDate;
@@ -22,16 +23,11 @@ import java.util.Random;
 @SpringBootApplication
 public class FlightsIntoSpaceApplication {
 
-    private static FlightRepository flightRepository;
-    private static TouristRepository touristRepository;
-
-    public FlightsIntoSpaceApplication(FlightRepository flightRepository, TouristRepository touristRepository) {
-        FlightsIntoSpaceApplication.flightRepository = flightRepository;
-        FlightsIntoSpaceApplication.touristRepository = touristRepository;
-    }
-
     public static void main(String[] args) {
-        SpringApplication.run(FlightsIntoSpaceApplication.class, args);
+        ConfigurableApplicationContext ctx = SpringApplication.run(FlightsIntoSpaceApplication.class, args);
+
+        TouristRepository touristRepository = ctx.getBean(TouristRepository.class);
+        FlightRepository flightRepository = ctx.getBean(FlightRepository.class);
 
         List<Tourist> tourists = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
