@@ -5,6 +5,8 @@ import eu.treative.flightsintospace.model.Tourist;
 import eu.treative.flightsintospace.repository.FlightRepository;
 import eu.treative.flightsintospace.repository.TouristRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,42 +24,38 @@ public class FlightService {
     private FlightRepository flightRepository;
     private TouristRepository touristRepository;
 
-    public List<Flight> gtaAllFlights(String keyword, String category) {
-        List<Flight> flights = new ArrayList<>();
-        flights = getFlights(keyword, category, flights);
+    public Page<Flight> gtaAllFlights(String keyword, String category, Integer page) {
+        Page<Flight> flights = getFlights(keyword, category, page);
         if (flights.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "no flights found");
         }
         return flights;
     }
 
-    private List<Flight> getFlights(String keyword, String category, List<Flight> flights) {
+    private Page<Flight> getFlights(String keyword, String category, Integer page) {
         if (keyword != null && !keyword.isEmpty()) {
             switch (category) {
                 case "start":
                     DateTimeFormatter ftr1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                     LocalDateTime startDateTime = LocalDateTime.parse(keyword, ftr1);
-                    flights = flightRepository.findAllByFlightStartGreaterThanEqual(startDateTime);
-                    break;
+                    return flightRepository.findAllByFlightStartGreaterThanEqual(startDateTime, PageRequest.of(page, 5));
                 case "end":
                     DateTimeFormatter ftr2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                     LocalDateTime ednDateTime = LocalDateTime.parse(keyword, ftr2);
-                    flights = flightRepository.findAllByFlightEndGreaterThanEqual(ednDateTime);
-                    break;
+                    return flightRepository.findAllByFlightEndGreaterThanEqual(ednDateTime, PageRequest.of(page, 5));
+
                 case "seats":
-                    flights = flightRepository.findAllByNumberOfSeats(Integer.parseInt(keyword));
-                    break;
+                    return flightRepository.findAllByNumberOfSeats(Integer.parseInt(keyword), PageRequest.of(page, 5));
+
                 case "tourists":
-                    flights = flightRepository.findAllByNumberOfTourist(Integer.parseInt(keyword));
-                    break;
+                    return flightRepository.findAllByNumberOfTourist(Integer.parseInt(keyword), PageRequest.of(page, 5));
+
                 case "price":
-                    flights = flightRepository.findAllByTicketPrice(keyword);
-                    break;
+                    return flightRepository.findAllByTicketPrice(keyword, PageRequest.of(page, 5));
+
             }
-        } else {
-            flights = flightRepository.findAll();
         }
-        return flights;
+        return flightRepository.findAll(PageRequest.of(page, 5));
     }
 
     public List<Flight> getAllAvailableFlightsForTourist(Long id) {

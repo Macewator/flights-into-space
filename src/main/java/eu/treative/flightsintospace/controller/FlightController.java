@@ -4,6 +4,7 @@ import eu.treative.flightsintospace.model.Flight;
 import eu.treative.flightsintospace.model.Tourist;
 import eu.treative.flightsintospace.service.FlightService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,12 @@ public class FlightController {
     private FlightService flightService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Flight>> getAllFlights(@RequestParam(required = false) String keyword, @RequestParam(required = false) String category) {
-        List<Flight> flights = flightService.gtaAllFlights(keyword, category);
-        return ResponseEntity.ok(flights);
+    public ResponseEntity<List<Flight>> getAllFlights(@RequestParam(required = false) String keyword,
+                                                      @RequestParam(required = false) String category,
+                                                      @RequestParam Integer page) {
+        Page<Flight> flights = flightService.gtaAllFlights(keyword, category, page);
+        List<Flight> flightList = flights.getContent();
+        return ResponseEntity.ok(flightList);
     }
 
     @GetMapping(path = "/tourists/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

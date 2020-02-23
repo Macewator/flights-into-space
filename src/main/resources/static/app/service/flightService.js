@@ -12,7 +12,7 @@ angular.module('app')
                     method: 'PUT',
                     url: FLIGHT_MANAGE_TOURISTS_ENDPOINT,
                     params:
-                        {id: '@id', fl: '@tr', option: '@option'}
+                        {id: '@id', tr: '@tr', option: '@option'}
                 },
                 getTourists: {
                     method: 'GET',
@@ -29,7 +29,7 @@ angular.module('app')
             });
     })
     .service('FlightService', function (Flight) {
-        this.getAll = (param1, param2) => Flight.query(param1, param2);
+        this.getAll = (param1, param2, param3) => Flight.query(param1, param2, param3);
         this.getAvailableFlights = index => Flight.getAvailableFlights({id: index});
         this.get = index => Flight.get({id: index});
         this.getTourists = index => Flight.getTourists({id: index});
