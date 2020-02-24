@@ -5,6 +5,9 @@ import eu.treative.flightsintospace.model.Tourist;
 import eu.treative.flightsintospace.service.FlightService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,15 +28,17 @@ public class FlightController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Flight>> getAllFlights(@RequestParam(required = false) String keyword,
                                                       @RequestParam(required = false) String category,
-                                                      @RequestParam Integer page) {
-        Page<Flight> flights = flightService.gtaAllFlights(keyword, category, page);
+                                                      @PageableDefault(sort = "flightStart", direction = Sort.Direction.ASC)
+                                                              Pageable pageable) {
+        Page<Flight> flights = flightService.gtaAllFlights(keyword, category, pageable);
         List<Flight> flightList = flights.getContent();
         return ResponseEntity.ok(flightList);
     }
 
     @GetMapping(path = "/tourists/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Flight>> getAllAvailableFlightsForTourist(@PathVariable Long id) {
-        List<Flight> flights = flightService.getAllAvailableFlightsForTourist(id);
+    public ResponseEntity<List<Flight>> getAllAvailableFlightsForTourist(@PathVariable Long id,
+                                                                         @RequestParam Integer page) {
+        List<Flight> flights = flightService.getAllAvailableFlightsForTourist(id, page);
         return ResponseEntity.ok(flights);
     }
 
@@ -44,8 +49,9 @@ public class FlightController {
     }
 
     @GetMapping(path = "/{id}/tourists", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Tourist>> getFlightTourists(@PathVariable Long id){
-        return ResponseEntity.ok(flightService.getFlightTourists(id));
+    public ResponseEntity<List<Tourist>> getFlightTourists(@PathVariable Long id,
+                                                           @RequestParam Integer page) {
+        return ResponseEntity.ok(flightService.getFlightTourists(id, page));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -63,16 +69,16 @@ public class FlightController {
     }
 
     @PutMapping(path = "/{idF}/tourists/{idT}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Flight> manageFlightsTourists(@RequestParam String action,@PathVariable Long idF, @PathVariable Long idT, @RequestBody Flight flight){
-        if(!idF.equals(flight.getId())){
-            throw  new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid id of the tourist sent");
+    public ResponseEntity<Flight> manageFlightsTourists(@RequestParam String action, @PathVariable Long idF, @PathVariable Long idT, @RequestBody Flight flight) {
+        if (!idF.equals(flight.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid id of the tourist sent");
         }
         Flight updatedFlight = flightService.manageFlightsTourists(flight, idT, action);
         return ResponseEntity.ok(updatedFlight);
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> removeFlight(@PathVariable Long id){
+    public ResponseEntity<Void> removeFlight(@PathVariable Long id) {
         flightService.removeFlight(id);
         return ResponseEntity.ok().build();
     }

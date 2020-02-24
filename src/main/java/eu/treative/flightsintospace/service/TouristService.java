@@ -5,6 +5,8 @@ import eu.treative.flightsintospace.model.Tourist;
 import eu.treative.flightsintospace.repository.FlightRepository;
 import eu.treative.flightsintospace.repository.TouristRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,12 +21,12 @@ public class TouristService {
     private TouristRepository touristRepository;
     private FlightRepository flightRepository;
 
-    public List<Tourist> gtaAllTourists(String lastName) {
-        List<Tourist> tourists;
+    public Page<Tourist> gtaAllTourists(String lastName, Pageable pageable) {
+        Page<Tourist> tourists;
         if (lastName != null && !lastName.isEmpty()) {
-            tourists = touristRepository.findAllByLastName(lastName);
+            tourists = touristRepository.findAllByLastName(lastName, pageable);
         } else {
-            tourists = touristRepository.findAll();
+            tourists = touristRepository.findAll(pageable);
         }
         if (tourists.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "no tourists found");
@@ -32,7 +34,7 @@ public class TouristService {
         return tourists;
     }
 
-    public List<Tourist> getAllAvailableTouristsForFlight(Long id) {
+    public List<Tourist> getAllAvailableTouristsForFlight(Long id, Integer page) {
         List<Tourist> tourists = new ArrayList<>();
         for (Tourist tourist : touristRepository.findAll()) {
             boolean availableTourist = tourist.getFlights().stream().anyMatch(flight -> flight.getId().equals(id));
@@ -43,7 +45,8 @@ public class TouristService {
         if (tourists.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "no available tourist found");
         }
-        return tourists;
+        int idxStart = 5 * (page - 1);
+        return tourists.subList(idxStart, idxStart + 5);
     }
 
     public Tourist getTouristById(Long id) {
@@ -52,8 +55,10 @@ public class TouristService {
                         "The given tourist does not exist"));
     }
 
-    public List<Flight> getTouristFlights(Long id) {
-        return getTouristById(id).getFlights();
+    public List<Flight> getTouristFlights(Long id, Integer page) {
+        List<Flight> flights = getTouristById(id).getFlights();
+        int idxStart = 5 * (page - 1);
+        return flights.subList(idxStart, idxStart + 5);
     }
 
     public Tourist saveNewTourist(Tourist tourist) {
@@ -85,7 +90,7 @@ public class TouristService {
         if ("remove".equals(action)) {
             updatedTourist.removeFlight(flight);
             return touristRepository.save(updatedTourist);
-        }else {
+        } else {
             updatedTourist.addFlight(flight);
             return touristRepository.save(updatedTourist);
         }

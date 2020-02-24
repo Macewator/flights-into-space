@@ -1,12 +1,12 @@
 angular.module('app')
     .controller('FlightListController', function (FlightService) {
         const vm = this;
-        vm.page = 0;
+        vm.page = 1;
 
         vm.flights = FlightService.getAll({page: vm.page});
 
         vm.search = (keyword, category) => {
-            vm.page = 0;
+            vm.page = 1;
             vm.flights = FlightService.getAll({keyword, category, page: vm.page});
         };
 
@@ -19,5 +19,4 @@ angular.module('app')
             vm.page = vm.page + 1;
             vm.flights = FlightService.getAll({keyword, category, page: vm.page});
         };
-
     });

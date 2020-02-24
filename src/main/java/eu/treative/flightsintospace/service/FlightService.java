@@ -6,7 +6,7 @@ import eu.treative.flightsintospace.repository.FlightRepository;
 import eu.treative.flightsintospace.repository.TouristRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,7 +24,7 @@ public class FlightService {
     private FlightRepository flightRepository;
     private TouristRepository touristRepository;
 
-    public Page<Flight> gtaAllFlights(String keyword, String category, Integer page) {
+    public Page<Flight> gtaAllFlights(String keyword, String category, Pageable page) {
         Page<Flight> flights = getFlights(keyword, category, page);
         if (flights.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "no flights found");
@@ -32,33 +32,33 @@ public class FlightService {
         return flights;
     }
 
-    private Page<Flight> getFlights(String keyword, String category, Integer page) {
+    private Page<Flight> getFlights(String keyword, String category, Pageable pageable) {
         if (keyword != null && !keyword.isEmpty()) {
             switch (category) {
                 case "start":
                     DateTimeFormatter ftr1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                     LocalDateTime startDateTime = LocalDateTime.parse(keyword, ftr1);
-                    return flightRepository.findAllByFlightStartGreaterThanEqual(startDateTime, PageRequest.of(page, 5));
+                    return flightRepository.findAllByFlightStartGreaterThanEqual(startDateTime, pageable);
                 case "end":
                     DateTimeFormatter ftr2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
                     LocalDateTime ednDateTime = LocalDateTime.parse(keyword, ftr2);
-                    return flightRepository.findAllByFlightEndGreaterThanEqual(ednDateTime, PageRequest.of(page, 5));
+                    return flightRepository.findAllByFlightEndGreaterThanEqual(ednDateTime, pageable);
 
                 case "seats":
-                    return flightRepository.findAllByNumberOfSeats(Integer.parseInt(keyword), PageRequest.of(page, 5));
+                    return flightRepository.findAllByNumberOfSeats(Integer.parseInt(keyword), pageable);
 
                 case "tourists":
-                    return flightRepository.findAllByNumberOfTourist(Integer.parseInt(keyword), PageRequest.of(page, 5));
+                    return flightRepository.findAllByNumberOfTourist(Integer.parseInt(keyword), pageable);
 
                 case "price":
-                    return flightRepository.findAllByTicketPrice(keyword, PageRequest.of(page, 5));
+                    return flightRepository.findAllByTicketPrice(keyword, pageable);
 
             }
         }
-        return flightRepository.findAll(PageRequest.of(page, 5));
+        return flightRepository.findAll(pageable);
     }
 
-    public List<Flight> getAllAvailableFlightsForTourist(Long id) {
+    public List<Flight> getAllAvailableFlightsForTourist(Long id, Integer page) {
         List<Flight> flights = new ArrayList<>();
         for (Flight flight : flightRepository.findAll()) {
             boolean availableFlight = flight.getTourists().stream().anyMatch(tourist -> tourist.getId().equals(id));
@@ -69,7 +69,8 @@ public class FlightService {
         if (flights.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "no available flights found");
         }
-        return flights;
+        int idxStart = 5 * (page - 1);
+        return flights.subList(idxStart, idxStart + 5);
     }
 
     public Flight getFlightById(Long id) {
@@ -78,8 +79,10 @@ public class FlightService {
                         "The given flight does not exist"));
     }
 
-    public List<Tourist> getFlightTourists(Long id) {
-        return getFlightById(id).getTourists();
+    public List<Tourist> getFlightTourists(Long id, Integer page) {
+        List<Tourist> tourists = getFlightById(id).getTourists();
+        int idxStart = 5 * (page - 1);
+        return tourists.subList(idxStart, idxStart + 5);
     }
 
     public Flight saveNewFlight(Flight flight) {

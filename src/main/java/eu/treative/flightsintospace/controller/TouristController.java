@@ -4,6 +4,10 @@ import eu.treative.flightsintospace.model.Flight;
 import eu.treative.flightsintospace.model.Tourist;
 import eu.treative.flightsintospace.service.TouristService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +26,18 @@ public class TouristController {
     private TouristService touristService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Tourist>> getAllTourist(@RequestParam(required = false) String lastName) {
-        List<Tourist> tourists = touristService.gtaAllTourists(lastName);
-        return ResponseEntity.ok(tourists);
+    public ResponseEntity<List<Tourist>> getAllTourist(@RequestParam(required = false) String lastName,
+                                                       @PageableDefault(sort = "lastName", direction = Sort.Direction.ASC)
+                                                               Pageable pageable) {
+        Page<Tourist> tourists = touristService.gtaAllTourists(lastName, pageable);
+        List<Tourist> touristList = tourists.getContent();
+        return ResponseEntity.ok(touristList);
     }
 
     @GetMapping(path = "/flights/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Tourist>> getAllAvailableTouristsForFlight(@PathVariable Long id) {
-        List<Tourist> tourists = touristService.getAllAvailableTouristsForFlight(id);
+    public ResponseEntity<List<Tourist>> getAllAvailableTouristsForFlight(@PathVariable Long id,
+                                                                          @RequestParam Integer page) {
+        List<Tourist> tourists = touristService.getAllAvailableTouristsForFlight(id, page);
         return ResponseEntity.ok(tourists);
     }
 
@@ -40,8 +48,9 @@ public class TouristController {
     }
 
     @GetMapping(path = "/{id}/flights", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Flight>> getTouristFlights(@PathVariable Long id) {
-        return ResponseEntity.ok(touristService.getTouristFlights(id));
+    public ResponseEntity<List<Flight>> getTouristFlights(@PathVariable Long id,
+                                                          @RequestParam Integer page) {
+        return ResponseEntity.ok(touristService.getTouristFlights(id, page));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
