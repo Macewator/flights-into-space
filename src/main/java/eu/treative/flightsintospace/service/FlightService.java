@@ -115,6 +115,9 @@ public class FlightService {
             tourist.removeFlight(updatedFlight);
             return flightRepository.save(updatedFlight);
         } else {
+            if (flight.getNumberOfTourist().equals(10)) {
+                throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, "Chosen flight is full");
+            }
             tourist.addFlight(updatedFlight);
             return flightRepository.save(updatedFlight);
         }
